@@ -18,6 +18,7 @@
 - [Installation](#installation)
 - [Usage](#usage)
   - [Docker Usage](#docker-usage)
+- [Test Reports](#test-reports)
 - [Project Structure](#project-structure)
 - [Commands](#commands)
 - [Configuration](#configuration)
@@ -34,6 +35,7 @@
 - ✅ **One-Command Setup** - Automated environment setup, test execution, and teardown
 - ✅ **Docker Integration** - Automatic Docker container management
 - ✅ **Docker Image Support** - Run tests in containerized environment
+- ✅ **Beautiful Reports** - Mochawesome HTML reports with screenshots and videos
 - ✅ **Complete Test Suite** - Gateway Service CRUD operations with Routes
 - ✅ **Auto Cleanup** - Automatic resource cleanup after tests
 - ✅ **CI/CD Ready** - Perfect for continuous integration pipelines
@@ -246,6 +248,89 @@ npm run teardown:auto   # Automatic cleanup (no confirmation)
 npm run cleanup         # Force cleanup (resolve conflicts)
 ```
 
+## Test Reports
+
+Generate beautiful HTML test reports with screenshots and videos using Mochawesome.
+
+### Quick Report Generation
+
+```bash
+# Run tests and generate report (all-in-one)
+npm run test:report
+```
+
+This command will:
+1. 🧹 Clean old reports
+2. 🧪 Run all tests
+3. 📊 Generate HTML report
+4. 🌐 Open report in browser
+
+### Individual Report Commands
+
+```bash
+# Clean old reports
+npm run report:clean
+
+# Generate report from existing test results
+npm run report:generate
+
+# Open report in browser
+npm run report:open
+```
+
+### Report Features
+
+- ✅ **Visual Summary** - Test statistics with charts
+- 📊 **Pass/Fail Breakdown** - Detailed test results
+- 📸 **Screenshots** - Auto-captured on failures
+- 🎥 **Videos** - Full test recordings
+- ⏱️ **Duration Tracking** - Individual test timings
+- 🔍 **Error Details** - Stack traces and code snippets
+- 🎨 **Interactive UI** - Collapsible suites, search, filters
+
+### Report Location
+
+```
+cypress/reports/
+├── mochawesome/           # JSON reports (raw data)
+│   └── *.json
+└── html/                  # HTML reports (viewable)
+    └── merged-report.html ← Open this file
+```
+
+### Complete Workflow with Reports
+
+```bash
+# Option 1: Automated (recommended)
+npm run setup
+npm run test:report         # Tests + Report
+npm run teardown:auto
+
+# Option 2: Full workflow (includes environment setup)
+npm run test:full           # Setup + Tests + Teardown (no report)
+npm run report:generate     # Generate report from results
+npm run report:open         # View report
+```
+
+### CI/CD Integration
+
+For continuous integration, add to your pipeline:
+
+```bash
+# Run tests
+npm run test:full
+
+# Generate report
+npm run report:generate
+
+# Upload artifacts (examples)
+# - cypress/reports/html/merged-report.html
+# - cypress/videos/**/*.mp4
+# - cypress/screenshots/**/*.png
+```
+
+📖 **Full Documentation:** See [REPORT_GUIDE.md](./REPORT_GUIDE.md) for detailed information.
+
 ## Project Structure
 
 ```
@@ -258,6 +343,9 @@ kong-test-cypress/
 │   ├── support/
 │   │   ├── commands.ts              # Custom commands
 │   │   └── e2e.ts                   # Global configuration
+│   ├── reports/                     # Test reports (auto-generated)
+│   │   ├── mochawesome/             # JSON reports
+│   │   └── html/                    # HTML reports
 │   ├── videos/                      # Test videos (auto-generated)
 │   └── screenshots/                 # Test screenshots (auto-generated)
 ├── scripts/
@@ -267,6 +355,9 @@ kong-test-cypress/
 │   ├── cleanup.js                   # Force cleanup
 │   ├── download.js                  # Download docker-compose
 │   ├── run-tests.js                 # Complete workflow
+│   ├── generate-report.js           # Generate HTML report
+│   ├── open-report.js               # Open report in browser
+│   ├── clean-reports.js             # Clean old reports
 │   ├── docker-build.js              # Build Docker image
 │   ├── docker-run.js                # Run tests in Docker
 │   └── docker-test-full.js          # Full Docker workflow
@@ -277,7 +368,8 @@ kong-test-cypress/
 ├── docker-compose.test.yml          # Docker compose for tests
 ├── .dockerignore                    # Docker ignore rules
 ├── .gitignore                       # Git ignore rules
-└── README.md                        # This file
+├── README.md                        # This file
+└── REPORT_GUIDE.md                  # Test report documentation
 ```
 
 ## Commands
@@ -287,12 +379,21 @@ kong-test-cypress/
 | Command | Description |
 |---------|-------------|
 | `npm run test:full` | Complete workflow (Setup + Test + Teardown) |
+| `npm run test:report` | Run tests + Generate HTML report + Open in browser |
 | `npm run test:e2e` | E2E workflow (Setup + Test + Auto cleanup) |
 | `npm run cy:open` | Open Cypress GUI |
 | `npm run cy:run` | Run tests in headless mode |
 | `npm run test:headed` | Run tests in headed mode |
 | `npm run cy:run:chrome` | Run tests in Chrome |
 | `npm run cy:run:firefox` | Run tests in Firefox |
+
+### Report Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run report:clean` | Clean old reports |
+| `npm run report:generate` | Generate HTML report from JSON results |
+| `npm run report:open` | Open HTML report in browser |
 
 ### Docker Commands
 

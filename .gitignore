@@ -22,7 +22,7 @@ yarn-error.log*
 
 # Test results
 test-results/
-reports/
+cypress/reports/
 
 # Docker files (from Google Drive)
 docker/

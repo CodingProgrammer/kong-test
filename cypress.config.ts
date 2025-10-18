@@ -14,7 +14,16 @@ export default defineConfig({
         watchForFileChanges: false,
         setupNodeEvents(on, config) {
             // implement node event listeners here
+            return config;
         },
     },
+    reporter: 'mochawesome',
+    reporterOptions: {
+        reportDir: 'cypress/reports/mochawesome',
+        overwrite: false,
+        html: false,
+        json: true,
+        timestamp: 'mmddyyyy_HHMMss'
+    }
 })
 
