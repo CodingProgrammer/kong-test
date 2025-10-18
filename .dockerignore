@@ -1,0 +1,36 @@
+# Node modules
+node_modules/
+npm-debug.log
+
+# Test results
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# Docker files
+docker/
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+.env
+

@@ -19,7 +19,10 @@
         "test:e2e": "npm run setup && npm run cy:run && npm run teardown:auto",
         "setup:bash": "bash scripts/setup.sh",
         "teardown:bash": "bash scripts/teardown.sh",
-        "cleanup:bash": "bash scripts/force-cleanup.sh"
+        "cleanup:bash": "bash scripts/force-cleanup.sh",
+        "docker:build": "node scripts/docker-build.js",
+        "docker:test": "node scripts/docker-run.js",
+        "docker:test:full": "node scripts/docker-test-full.js"
     },
     "keywords": [
         "cypress",

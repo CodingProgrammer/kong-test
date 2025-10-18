@@ -13,8 +13,11 @@
 - [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Quick Start](#quick-start)
+  - [Method 1: Native Installation](#method-1-native-installation)
+  - [Method 2: Docker Container (Recommended)](#method-2-docker-container-recommended)
 - [Installation](#installation)
 - [Usage](#usage)
+  - [Docker Usage](#docker-usage)
 - [Project Structure](#project-structure)
 - [Commands](#commands)
 - [Configuration](#configuration)
@@ -30,24 +33,33 @@
 - ✅ **TypeScript** - Full type checking and IntelliSense support
 - ✅ **One-Command Setup** - Automated environment setup, test execution, and teardown
 - ✅ **Docker Integration** - Automatic Docker container management
+- ✅ **Docker Image Support** - Run tests in containerized environment
 - ✅ **Complete Test Suite** - Gateway Service CRUD operations with Routes
 - ✅ **Auto Cleanup** - Automatic resource cleanup after tests
 - ✅ **CI/CD Ready** - Perfect for continuous integration pipelines
 
 ## Prerequisites
 
-Before you begin, ensure you have the following installed:
+### For Native Installation
 
 - [Node.js](https://nodejs.org/) v18.x or higher
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) (running)
 - npm (comes with Node.js)
 
+### For Docker Container (Recommended)
+
+- **Only [Docker Desktop](https://www.docker.com/products/docker-desktop)** required!
+- No Node.js installation needed
+- No npm dependencies to manage
+
 ## Quick Start
+
+### Method 1: Native Installation
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
-cd kong-test-cypress
+git clone https://github.com/CodingProgrammer/kong-test.git
+cd kong-test
 
 # Install dependencies
 npm install
@@ -62,6 +74,33 @@ npm run test:full
 - ⏳ Wait for services to be ready
 - 🧪 Run all test cases
 - 🧹 Clean up containers
+
+### Method 2: Docker Container (Recommended)
+
+**🐳 Most Portable - Only Docker required!**
+
+```bash
+# Clone the repository
+git clone https://github.com/CodingProgrammer/kong-test.git
+cd kong-test
+
+# Build Docker image (one-time setup)
+npm run docker:build
+# OR without npm:
+docker build -t kong-cypress-tests:latest .
+
+# Run complete test workflow (Kong + Tests in containers)
+npm run docker:test:full
+# OR without npm:
+docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit
+```
+
+**Benefits of Docker method:**
+- ✅ No Node.js installation required
+- ✅ No dependency conflicts
+- ✅ Works identically on all platforms
+- ✅ Perfect for CI/CD
+- ✅ Complete isolation
 
 ## Installation
 
@@ -111,7 +150,7 @@ npm install
 
 ## Usage
 
-### Running Tests
+### Native Installation
 
 #### Complete Workflow (Recommended)
 
@@ -143,6 +182,61 @@ npm run cy:run:chrome    # Run in Chrome
 npm run cy:run:firefox   # Run in Firefox
 ```
 
+### Docker Usage
+
+#### Option 1: Complete Environment (Recommended)
+
+Run Kong + Cypress tests in containers:
+
+```bash
+# Build and run everything
+npm run docker:test:full
+
+# OR without npm
+docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit
+docker-compose -f docker-compose.test.yml down -v
+```
+
+**This will:**
+1. Build the Cypress test image
+2. Start Kong Gateway + Database
+3. Wait for Kong to be ready
+4. Run all Cypress tests
+5. Clean up containers
+
+#### Option 2: Test Against Existing Kong
+
+If you already have Kong running locally:
+
+```bash
+# 1. Start your Kong instance first
+npm run setup
+
+# 2. Build test image (one-time)
+npm run docker:build
+
+# 3. Run tests in container
+npm run docker:test
+```
+
+#### Option 3: Pure Docker Commands
+
+```bash
+# Build image
+docker build -t kong-cypress-tests:latest .
+
+# Run tests (with Kong on host)
+docker run --rm \
+  --add-host host.docker.internal:host-gateway \
+  -v $(pwd)/cypress/videos:/app/cypress/videos \
+  -v $(pwd)/cypress/screenshots:/app/cypress/screenshots \
+  -e CYPRESS_baseUrl=http://host.docker.internal:8002 \
+  kong-cypress-tests:latest
+
+# Run complete environment
+docker-compose -f docker-compose.test.yml up --build
+```
+
 ### Environment Management
 
 ```bash
@@ -172,10 +266,16 @@ kong-test-cypress/
 │   ├── teardown-auto.js             # Auto teardown
 │   ├── cleanup.js                   # Force cleanup
 │   ├── download.js                  # Download docker-compose
-│   └── run-tests.js                 # Complete workflow
+│   ├── run-tests.js                 # Complete workflow
+│   ├── docker-build.js              # Build Docker image
+│   ├── docker-run.js                # Run tests in Docker
+│   └── docker-test-full.js          # Full Docker workflow
 ├── cypress.config.ts                # Cypress configuration
 ├── tsconfig.json                    # TypeScript configuration
 ├── package.json                     # Project dependencies
+├── Dockerfile                       # Docker image definition
+├── docker-compose.test.yml          # Docker compose for tests
+├── .dockerignore                    # Docker ignore rules
 ├── .gitignore                       # Git ignore rules
 └── README.md                        # This file
 ```
@@ -193,6 +293,14 @@ kong-test-cypress/
 | `npm run test:headed` | Run tests in headed mode |
 | `npm run cy:run:chrome` | Run tests in Chrome |
 | `npm run cy:run:firefox` | Run tests in Firefox |
+
+### Docker Commands
+
+| Command | Description |
+|---------|-------------|
+| `npm run docker:build` | Build Docker test image |
+| `npm run docker:test` | Run tests in Docker (Kong on host) |
+| `npm run docker:test:full` | Complete workflow in Docker (Kong + Tests) |
 
 ### Environment Commands
 
@@ -342,8 +450,17 @@ describe('Test Suite', () => {
 
 ```bash
 # Error: Docker is not running or not installed
-# Solution: Start Docker Desktop, then:
+
+# Solution 1: Start Docker Desktop
+# - Mac: Open Docker Desktop from Applications
+# - Windows: Start Docker Desktop from Start Menu
+# - Linux: sudo systemctl start docker
+
+# Then run:
 npm run setup
+
+# Solution 2: Use Docker tests (auto-starts containers)
+npm run docker:test:full
 ```
 </details>
 
@@ -410,7 +527,7 @@ docker info
 
 ## CI/CD Integration
 
-### GitHub Actions Example
+### GitHub Actions Example (Native)
 
 ```yaml
 name: E2E Tests
@@ -427,6 +544,56 @@ jobs:
           node-version: '18'
       - run: npm install
       - run: npm run test:full
+```
+
+### GitHub Actions Example (Docker - Recommended)
+
+```yaml
+name: E2E Tests (Docker)
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Build and Run Tests
+        run: |
+          docker-compose -f docker-compose.test.yml build
+          docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+          
+      - name: Cleanup
+        if: always()
+        run: docker-compose -f docker-compose.test.yml down -v
+      
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: cypress-results
+          path: |
+            cypress/videos/
+            cypress/screenshots/
+```
+
+### GitLab CI Example (Docker)
+
+```yaml
+test:
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker-compose -f docker-compose.test.yml build
+    - docker-compose -f docker-compose.test.yml up --abort-on-container-exit
+    - docker-compose -f docker-compose.test.yml down -v
+  artifacts:
+    when: always
+    paths:
+      - cypress/videos/
+      - cypress/screenshots/
 ```
 
 ## Contributing

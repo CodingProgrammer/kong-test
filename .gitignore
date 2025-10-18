@@ -24,9 +24,9 @@ yarn-error.log*
 test-results/
 reports/
 
-# Docker files
+# Docker files (from Google Drive)
 docker/
-docker-compose.yml
+docker/docker-compose.yml
 
 # Environment variables
 .env
