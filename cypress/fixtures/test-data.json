@@ -1,0 +1,75 @@
+{
+    "services": {
+        "valid": {
+            "url": "https://api.kong-air.com/flights",
+            "host": "api.kong-air.com",
+            "port": "443",
+            "path": "/flights",
+            "protocol": "https"
+        },
+        "invalid": {
+            "malformedUrl": "http:test123",
+            "invalidProtocol": "ftp://example.com",
+            "missingHost": "http://",
+            "invalidPort": "http://example.com:99999"
+        }
+    },
+    "routes": {
+        "valid": {
+            "name": "test-route",
+            "path": "/testpath",
+            "methods": [
+                "GET",
+                "POST"
+            ],
+            "protocols": [
+                "http",
+                "https"
+            ]
+        },
+        "invalid": {
+            "emptyPath": "",
+            "invalidPath": "invalid-path",
+            "invalidMethod": "INVALID"
+        }
+    },
+    "consumers": {
+        "valid": {
+            "username": "test-consumer",
+            "customId": "test-custom-id"
+        }
+    },
+    "plugins": {
+        "rateLimit": {
+            "name": "rate-limiting",
+            "config": {
+                "minute": 5,
+                "policy": "local"
+            }
+        },
+        "keyAuth": {
+            "name": "key-auth",
+            "config": {
+                "key_names": [
+                    "apikey"
+                ]
+            }
+        }
+    },
+    "messages": {
+        "success": {
+            "serviceCreated": "successfully created!",
+            "serviceDeleted": "successfully deleted!",
+            "serviceUpdated": "successfully updated!"
+        },
+        "errors": {
+            "urlRequired": "URL is required",
+            "urlInvalid": "URL is not valid",
+            "nameRequired": "Name is required",
+            "hostRequired": "Host is required"
+        },
+        "warnings": {
+            "noLicense": "No valid Kong Enterprise license configured"
+        }
+    }
+}
