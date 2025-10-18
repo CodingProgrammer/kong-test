@@ -1,7 +1,7 @@
 {
     "name": "kong-test-cypress",
     "version": "1.0.0",
-    "description": "Kong UI Automation Testing Project - Using Cypress + TypeScript",
+    "description": "Kong UI Automation Testing Project - Using Cypress + TypeScript (Recommended: Native Method)",
     "main": "index.js",
     "scripts": {
         "cy:open": "cypress open",

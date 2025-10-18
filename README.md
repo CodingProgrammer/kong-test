@@ -46,15 +46,15 @@
 - [Docker Desktop](https://www.docker.com/products/docker-desktop) (running)
 - npm (comes with Node.js)
 
-### For Docker Container (Recommended)
+### For Docker Container (Experimental)
 
-- **Only [Docker Desktop](https://www.docker.com/products/docker-desktop)** required!
-- No Node.js installation needed
-- No npm dependencies to manage
+- **Only [Docker Desktop](https://www.docker.com/products/docker-desktop)** required
+- No Node.js installation needed  
+- ⚠️ Currently has environment compatibility issues
 
 ## Quick Start
 
-### Method 1: Native Installation
+### ⭐ Recommended: Native Installation
 
 ```bash
 # Clone the repository
@@ -70,37 +70,37 @@ npm run test:full
 
 **That's it!** The script will automatically:
 - 📥 Download docker-compose.yml
-- 🚀 Start Docker containers
+- 🚀 Start Docker containers (Kong Gateway)
 - ⏳ Wait for services to be ready
-- 🧪 Run all test cases
+- 🧪 Run all test cases (4 tests)
 - 🧹 Clean up containers
 
-### Method 2: Docker Container (Recommended)
+**Why Native Method?**
+- ✅ Fully tested and working perfectly
+- ✅ Complete Kong Enterprise features
+- ✅ All UI elements present
+- ✅ Fast execution (~50 seconds)
+- ✅ Easy debugging with GUI mode
 
-**🐳 Most Portable - Only Docker required!**
+### 🧪 Experimental: Docker Container Method
+
+> ⚠️ **Note**: Currently has environment compatibility issues. Use native method for reliable results.
+
+For those interested in containerized testing:
 
 ```bash
-# Clone the repository
-git clone https://github.com/CodingProgrammer/kong-test.git
-cd kong-test
-
-# Build Docker image (one-time setup)
+# Build Docker image
 npm run docker:build
-# OR without npm:
-docker build -t kong-cypress-tests:latest .
 
-# Run complete test workflow (Kong + Tests in containers)
+# Run tests in container (experimental)
 npm run docker:test:full
-# OR without npm:
-docker-compose -f docker-compose.test.yml up --build --abort-on-container-exit
 ```
 
-**Benefits of Docker method:**
-- ✅ No Node.js installation required
-- ✅ No dependency conflicts
-- ✅ Works identically on all platforms
-- ✅ Perfect for CI/CD
-- ✅ Complete isolation
+**Known Issues:**
+- Kong runs in simplified mode (missing KONG_PASSWORD)
+- UI structure differs from native environment
+- Some tests may fail due to missing enterprise features
+- See `ENVIRONMENT_DIFFERENCES.md` for details
 
 ## Installation
 
