@@ -1,6 +1,48 @@
 /// <reference types="cypress" />
 
 /**
+ * Helper function to click the appropriate "Create Service" button
+ * Handles both empty state and toolbar button scenarios
+ */
+const clickCreateServiceButton = () => {
+    cy.get('body').then(($body) => {
+        // Check for empty state first (most common in new environments)
+        const hasEmptyState = $body.find('[data-testid="empty-state-action"]').length > 0
+        const hasEmptyStateText = $body.text().includes('Create your first service')
+        const hasEmptyStateIcon = $body.find('[data-testid="empty-state"]').length > 0
+
+        if (hasEmptyState || hasEmptyStateText || hasEmptyStateIcon) {
+            // List is empty, click empty state button
+            cy.log('✅ Service list is empty, using empty-state-action button')
+            cy.get('[data-testid="empty-state-action"]')
+                .should('be.visible')
+                .click()
+        } else {
+            // List is not empty, click toolbar button
+            cy.log('✅ Service list is not empty, using toolbar-add-gateway-service button')
+
+            // Try multiple possible selectors for the toolbar button
+            cy.get('body').then(($body) => {
+                const toolbarButton = $body.find('[data-testid="toolbar-add-gateway-service"]')
+                const addButton = $body.find('[data-testid="add-gateway-service"]')
+                const createButton = $body.find('button:contains("New gateway service")')
+
+                if (toolbarButton.length > 0) {
+                    cy.get('[data-testid="toolbar-add-gateway-service"]').click()
+                } else if (addButton.length > 0) {
+                    cy.get('[data-testid="add-gateway-service"]').click()
+                } else if (createButton.length > 0) {
+                    cy.get('button:contains("New gateway service")').click()
+                } else {
+                    // Fallback: look for any button with "New" or "Add" text
+                    cy.get('button').contains(/New|Add|Create/i).first().click()
+                }
+            })
+        }
+    })
+}
+
+/**
  * Helper function to delete a Route
  * @param routeName - Route name
  */
@@ -137,22 +179,11 @@ describe('Gateway Service Management Tests', () => {
         // Wait for page data to load
         cy.waitForPageDataLoaded()
 
-        // Choose create button based on service list state
-        cy.get('body').then(($body) => {
-            if ($body.find('[data-testid="empty-state-action"]').length > 0) {
-                // List is empty, click empty state button
-                cy.log('Service list is empty, using empty-state-action button')
-                cy.get('[data-testid="empty-state-action"]')
-                    .should('be.visible')
-                    .click()
-            } else {
-                // List is not empty, click toolbar button
-                cy.log('Service list is not empty, using toolbar-add-gateway-service button')
-                cy.get('[data-testid="toolbar-add-gateway-service"]')
-                    .should('be.visible')
-                    .click()
-            }
-        })
+        // Wait a bit more for UI to stabilize
+        cy.wait(1000)
+
+        // Click the appropriate create service button
+        clickCreateServiceButton()
         cy.waitForPageLoad()
 
         // Enter test data in URL input field
@@ -239,22 +270,11 @@ describe('Gateway Service Management Tests', () => {
         // Wait for page data to load
         cy.waitForPageDataLoaded()
 
-        // Choose create button based on service list state
-        cy.get('body').then(($body) => {
-            if ($body.find('[data-testid="empty-state-action"]').length > 0) {
-                // List is empty, click empty state button
-                cy.log('Service list is empty, using empty-state-action button')
-                cy.get('[data-testid="empty-state-action"]')
-                    .should('be.visible')
-                    .click()
-            } else {
-                // List is not empty, click toolbar button
-                cy.log('Service list is not empty, using toolbar-add-gateway-service button')
-                cy.get('[data-testid="toolbar-add-gateway-service"]')
-                    .should('be.visible')
-                    .click()
-            }
-        })
+        // Wait a bit more for UI to stabilize
+        cy.wait(1000)
+
+        // Click the appropriate create service button
+        clickCreateServiceButton()
         cy.waitForPageLoad()
 
         // Enter test data in URL input field
@@ -304,22 +324,11 @@ describe('Gateway Service Management Tests', () => {
         // Wait for page data to load
         cy.waitForPageDataLoaded()
 
-        // Choose create button based on service list state
-        cy.get('body').then(($body) => {
-            if ($body.find('[data-testid="empty-state-action"]').length > 0) {
-                // List is empty, click empty state button
-                cy.log('Service list is empty, using empty-state-action button')
-                cy.get('[data-testid="empty-state-action"]')
-                    .should('be.visible')
-                    .click()
-            } else {
-                // List is not empty, click toolbar button
-                cy.log('Service list is not empty, using toolbar-add-gateway-service button')
-                cy.get('[data-testid="toolbar-add-gateway-service"]')
-                    .should('be.visible')
-                    .click()
-            }
-        })
+        // Wait a bit more for UI to stabilize
+        cy.wait(1000)
+
+        // Click the appropriate create service button
+        clickCreateServiceButton()
         cy.waitForPageLoad()
 
         // Enter test data in URL input field
@@ -387,22 +396,11 @@ describe('Gateway Service Management Tests', () => {
         // Wait for page data to load
         cy.waitForPageDataLoaded()
 
-        // Choose create button based on service list state
-        cy.get('body').then(($body) => {
-            if ($body.find('[data-testid="empty-state-action"]').length > 0) {
-                // List is empty, click empty state button
-                cy.log('Service list is empty, using empty-state-action button')
-                cy.get('[data-testid="empty-state-action"]')
-                    .should('be.visible')
-                    .click()
-            } else {
-                // List is not empty, click toolbar button
-                cy.log('Service list is not empty, using toolbar-add-gateway-service button')
-                cy.get('[data-testid="toolbar-add-gateway-service"]')
-                    .should('be.visible')
-                    .click()
-            }
-        })
+        // Wait a bit more for UI to stabilize
+        cy.wait(1000)
+
+        // Click the appropriate create service button
+        clickCreateServiceButton()
         cy.waitForPageLoad()
 
         // Enter test data in URL input field
