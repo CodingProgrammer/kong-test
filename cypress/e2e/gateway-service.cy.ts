@@ -3,43 +3,83 @@
 /**
  * Helper function to click the appropriate "Create Service" button
  * Handles both empty state and toolbar button scenarios
+ * Robust implementation with multiple fallback strategies
  */
 const clickCreateServiceButton = () => {
+    cy.log('🔍 Detecting service list state...')
+    
     cy.get('body').then(($body) => {
-        // Check for empty state first (most common in new environments)
-        const hasEmptyState = $body.find('[data-testid="empty-state-action"]').length > 0
-        const hasEmptyStateText = $body.text().includes('Create your first service')
+        // Strategy 1: Check for empty state indicators
+        const hasEmptyStateButton = $body.find('[data-testid="empty-state-action"]').length > 0
+        const hasEmptyStateText = $body.text().includes('Create your first service') || 
+                                  $body.text().includes('No Gateway Services exist')
         const hasEmptyStateIcon = $body.find('[data-testid="empty-state"]').length > 0
-
-        if (hasEmptyState || hasEmptyStateText || hasEmptyStateIcon) {
-            // List is empty, click empty state button
-            cy.log('✅ Service list is empty, using empty-state-action button')
-            cy.get('[data-testid="empty-state-action"]')
+        const hasEmptyStateTitle = $body.find('.empty-state-title').length > 0
+        
+        // Check if toolbar button exists
+        const hasToolbarButton = $body.find('[data-testid="toolbar-add-gateway-service"]').length > 0
+        
+        cy.log(`📊 Detection results:
+            - Empty state button: ${hasEmptyStateButton}
+            - Empty state text: ${hasEmptyStateText}
+            - Empty state icon: ${hasEmptyStateIcon}
+            - Empty state title: ${hasEmptyStateTitle}
+            - Toolbar button: ${hasToolbarButton}`)
+        
+        // Determine which button to use
+        const isEmptyState = hasEmptyStateButton || hasEmptyStateText || hasEmptyStateIcon || hasEmptyStateTitle
+        
+        if (isEmptyState && !hasToolbarButton) {
+            // Empty state: use empty-state-action button
+            cy.log('✅ Service list is EMPTY - using empty-state-action button')
+            cy.get('[data-testid="empty-state-action"]', { timeout: 10000 })
                 .should('be.visible')
-                .click()
+                .should('not.be.disabled')
+                .click({ force: false })
+            cy.log('✅ Clicked empty-state-action button')
+        } else if (hasToolbarButton) {
+            // Non-empty state: use toolbar button
+            cy.log('✅ Service list is NOT EMPTY - using toolbar-add-gateway-service button')
+            cy.get('[data-testid="toolbar-add-gateway-service"]', { timeout: 10000 })
+                .should('be.visible')
+                .should('not.be.disabled')
+                .click({ force: false })
+            cy.log('✅ Clicked toolbar-add-gateway-service button')
         } else {
-            // List is not empty, click toolbar button
-            cy.log('✅ Service list is not empty, using toolbar-add-gateway-service button')
-
-            // Try multiple possible selectors for the toolbar button
-            cy.get('body').then(($body) => {
-                const toolbarButton = $body.find('[data-testid="toolbar-add-gateway-service"]')
-                const addButton = $body.find('[data-testid="add-gateway-service"]')
-                const createButton = $body.find('button:contains("New gateway service")')
-
-                if (toolbarButton.length > 0) {
-                    cy.get('[data-testid="toolbar-add-gateway-service"]').click()
-                } else if (addButton.length > 0) {
-                    cy.get('[data-testid="add-gateway-service"]').click()
-                } else if (createButton.length > 0) {
-                    cy.get('button:contains("New gateway service")').click()
-                } else {
-                    // Fallback: look for any button with "New" or "Add" text
-                    cy.get('button').contains(/New|Add|Create/i).first().click()
+            // Fallback: try all possible selectors
+            cy.log('⚠️  Using fallback strategy...')
+            
+            cy.get('body').then(($fallbackBody) => {
+                const selectors = [
+                    '[data-testid="empty-state-action"]',
+                    '[data-testid="toolbar-add-gateway-service"]',
+                    '[data-testid="add-gateway-service"]',
+                    'button:contains("New gateway service")',
+                    'button:contains("New Gateway Service")',
+                    'a[href*="/services/create"]'
+                ]
+                
+                let clicked = false
+                for (const selector of selectors) {
+                    if ($fallbackBody.find(selector).length > 0) {
+                        cy.log(`✅ Found fallback selector: ${selector}`)
+                        cy.get(selector).first().click({ force: false })
+                        clicked = true
+                        break
+                    }
+                }
+                
+                if (!clicked) {
+                    cy.log('❌ No create button found, trying generic button search')
+                    cy.get('button').contains(/New|Add|Create/i).first().click({ force: false })
                 }
             })
         }
     })
+    
+    // Wait for navigation to complete
+    cy.wait(500)
+    cy.log('✅ Create service button clicked successfully')
 }
 
 /**
