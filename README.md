@@ -1,331 +1,358 @@
 # Kong UI Automation Testing Project
 
-This is a UI automation testing project based on Cypress and TypeScript, designed for testing the Kong Admin interface.
+A cross-platform UI automation testing framework for Kong Admin interface using Cypress and TypeScript.
 
-## Project Features
+[![Cypress](https://img.shields.io/badge/Cypress-13.x-brightgreen.svg)](https://www.cypress.io/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
+[![Platform](https://img.shields.io/badge/Platform-Mac%20%7C%20Windows%20%7C%20Linux-lightgrey.svg)]()
 
-- ✅ Using Cypress 13.x latest version
-- ✅ TypeScript support with full type checking
-- ✅ Modern project structure
-- ✅ Custom commands support
-- ✅ Complete test examples
-- ✅ **Cross-platform compatible** (Mac, Windows, Linux)
+## Features
 
-## Tech Stack
+- ✅ **Cross-Platform**: Works on macOS, Windows, and Linux
+- ✅ **TypeScript**: Full type checking and IntelliSense support
+- ✅ **Automated Workflow**: One-command setup, test, and teardown
+- ✅ **Docker Integration**: Automatic environment management
+- ✅ **Test Cases**: Complete Gateway Service CRUD operations
+- ✅ **Auto Cleanup**: Automatic resource cleanup after tests
 
-- **Testing Framework**: Cypress 13.17.0
-- **Programming Language**: TypeScript 5.3.0
-- **Node.js**: Recommended v18.x or higher
-- **Platform Support**: macOS, Windows, Linux
+## Prerequisites
+
+- **Node.js** v18.x or higher
+- **Docker Desktop** (running)
+- **npm** (comes with Node.js)
+
+## Quick Start
+
+### All Platforms (Mac, Windows, Linux)
+
+```bash
+# 1. Install dependencies
+npm install
+
+# 2. Run complete test workflow (Setup + Test + Teardown)
+npm run test:full
+```
+
+That's it! The script will automatically:
+- Download docker-compose.yml from Google Drive
+- Start Docker containers
+- Wait for services to be ready
+- Run all test cases
+- Clean up containers
+
+### Step-by-Step Workflow
+
+```bash
+# Setup environment
+npm run setup
+
+# Run tests (choose one)
+npm run cy:open         # GUI mode (recommended for development)
+npm run cy:run          # Headless mode
+npm run test:headed     # Headed mode (visible browser)
+
+# Cleanup environment
+npm run teardown:auto
+```
+
+## Platform-Specific Setup
+
+### macOS
+
+```bash
+# Install Node.js (using Homebrew)
+brew install node
+
+# Install Docker Desktop
+# Download from: https://www.docker.com/products/docker-desktop
+
+# Run tests
+npm install
+npm run test:full
+```
+
+### Windows
+
+```powershell
+# Install Node.js
+# Download from: https://nodejs.org/
+
+# Install Docker Desktop
+# Download from: https://www.docker.com/products/docker-desktop
+
+# Run tests (PowerShell, CMD, or Git Bash)
+npm install
+npm run test:full
+```
+
+### Linux
+
+```bash
+# Install Node.js (Ubuntu/Debian)
+sudo apt update
+sudo apt install nodejs npm
+
+# Install Docker
+sudo apt install docker.io docker-compose-plugin
+
+# Add user to docker group
+sudo usermod -aG docker $USER
+# Log out and back in
+
+# Run tests
+npm install
+npm run test:full
+```
 
 ## Project Structure
 
 ```
 kong-test-Cypress/
 ├── cypress/
-│   ├── e2e/                    # E2E test cases
-│   │   └── gateway-service.cy.ts  # Gateway Service tests
-│   ├── fixtures/               # Test data
-│   │   └── example.json        # Example test data
-│   ├── support/                # Support files
-│   │   ├── commands.ts         # Custom commands
-│   │   └── e2e.ts             # Global configuration
-│   ├── videos/                 # Test videos (auto-generated)
-│   └── screenshots/            # Failure screenshots (auto-generated)
-├── cypress.config.ts           # Cypress configuration
-├── tsconfig.json               # TypeScript configuration
-├── package.json                # Project dependencies
-└── README.md                   # Project documentation
+│   ├── e2e/
+│   │   └── gateway-service.cy.ts    # Gateway Service test cases
+│   ├── fixtures/
+│   │   └── example.json             # Test data
+│   ├── support/
+│   │   ├── commands.ts              # Custom commands
+│   │   └── e2e.ts                   # Global configuration
+│   ├── videos/                      # Test videos (auto-generated)
+│   └── screenshots/                 # Screenshots (auto-generated)
+├── scripts/
+│   ├── setup.js                     # Setup script (Node.js)
+│   ├── teardown.js                  # Teardown script
+│   ├── teardown-auto.js             # Auto teardown
+│   ├── cleanup.js                   # Force cleanup
+│   ├── download.js                  # Download docker-compose
+│   ├── run-tests.js                 # Complete workflow
+│   ├── *.sh                         # Bash versions (optional)
+├── cypress.config.ts                # Cypress configuration
+├── tsconfig.json                    # TypeScript configuration
+├── package.json                     # Dependencies and scripts
+└── README.md                        # This file
 ```
 
-## Quick Start
+## Available Commands
 
-### 0. Automated Complete Workflow (Recommended)
+### Test Execution
 
 ```bash
-# One-click run: Setup → Test → Teardown
-npm run test:full
+npm run test:full      # Complete workflow (Setup + Test + Teardown)
+npm run test:e2e       # E2E workflow (Setup + Test + Auto cleanup)
+npm run cy:open        # Open Cypress GUI
+npm run cy:run         # Run tests (headless)
+npm run test:headed    # Run tests (headed mode)
 ```
 
-This will automatically:
-1. Download docker-compose.yml from Google Drive
-2. Start Docker containers
-3. Run all test cases
-4. Automatically clean up the environment
-
-> 💡 **Detailed Instructions**: See [Automation Testing Workflow Guide](./AUTOMATION_GUIDE.md)
-
----
-
-### 1. Install Dependencies
+### Environment Management
 
 ```bash
-npm install
+npm run setup          # Prepare environment
+npm run teardown       # Interactive cleanup (with confirmation)
+npm run teardown:auto  # Automatic cleanup (no confirmation)
+npm run cleanup        # Force cleanup (resolve conflicts)
 ```
 
-### 2. Prepare Test Environment (First Run)
+### Browser Selection
 
 ```bash
-# Download and start Docker environment
-npm run setup
+npm run cy:run:chrome   # Run in Chrome
+npm run cy:run:firefox  # Run in Firefox
 ```
-
-### 3. Run Tests
-
-#### Open Cypress Test Runner (Recommended for Development)
-
-```bash
-npm run cy:open
-```
-
-#### Run All Tests in Command Line
-
-```bash
-npm run test
-# or
-npm run cy:run
-```
-
-#### Run Tests in Headed Mode (Visible Browser)
-
-```bash
-npm run test:headed
-# or
-npm run cy:run:headed
-```
-
-#### Run Tests in Specific Browser
-
-```bash
-# Chrome browser
-npm run cy:run:chrome
-
-# Firefox browser
-npm run cy:run:firefox
-```
-
-## Test Target
-
-- **Base URL**: `http://localhost:8002`
-- **Test Pages**: Gateway Service management related pages
-
-> ⚠️ **Note**: Please ensure the target application is running on `http://localhost:8002` before running tests.
 
 ## Configuration
 
-### Cypress Configuration (cypress.config.ts)
+### Test Target
 
-Main configuration items:
-- `baseUrl`: Base URL of the test target
-- `viewportWidth`: Viewport width (1920px)
-- `viewportHeight`: Viewport height (1080px)
-- `video`: Whether to record test videos
-- `screenshotOnRunFailure`: Auto-screenshot on test failure
-- `defaultCommandTimeout`: Default command timeout (10 seconds)
+- **Base URL**: `http://localhost:8002`
+- **Kong Admin UI**: `http://localhost:8002`
+- **Kong Admin API**: `http://localhost:8001`
 
-### TypeScript Configuration (tsconfig.json)
+### Cypress Configuration (`cypress.config.ts`)
 
-- Supports ES2020 syntax
-- Strict mode enabled
-- Includes Cypress and Node.js type definitions
-- Supports path alias `@/*` pointing to `cypress/*`
+```typescript
+{
+  baseUrl: 'http://localhost:8002',
+  viewportWidth: 1920,
+  viewportHeight: 1080,
+  video: true,
+  screenshotOnRunFailure: true,
+  defaultCommandTimeout: 10000
+}
+```
 
-## Writing Test Cases
+## Test Cases
+
+Current test suite includes:
+
+1. **Create Gateway Service** - Basic service creation
+2. **Create Service with Wrong URL** - Validation testing
+3. **Create Service with Invalid Form** - Error handling
+4. **Create Service with Routes** - Complete workflow with Routes
+
+All tests include automatic cleanup to ensure no resource leakage.
+
+## Troubleshooting
+
+### Docker Not Running
+
+```bash
+# Error: Docker is not running or not installed
+# Solution: Start Docker Desktop, then run:
+npm run setup
+```
+
+### Container Name Conflict
+
+```bash
+# Error: Container name already in use
+# Solution: Force cleanup and retry:
+npm run cleanup
+npm run setup
+```
+
+### Port Already in Use
+
+```bash
+# Error: Port 8002 is already in use
+# Solution:
+npm run cleanup  # Stop all Kong containers
+npm run setup    # Restart
+```
+
+### Permission Denied (Linux/Mac)
+
+```bash
+# Error: Permission denied for scripts
+# Solution:
+chmod +x scripts/*.sh scripts/*.js
+```
+
+### Docker Permission Denied (Linux)
+
+```bash
+# Error: docker: permission denied
+# Solution:
+sudo usermod -aG docker $USER
+# Log out and back in
+```
+
+## Development Tips
+
+### For Local Development
+
+```bash
+# 1. Setup once
+npm run setup
+
+# 2. Develop with GUI (keeps containers running)
+npm run cy:open
+
+# 3. Run specific tests
+# (use Cypress GUI to select tests)
+
+# 4. Cleanup when done
+npm run teardown
+```
+
+### For CI/CD
+
+```bash
+# Single command for everything
+npm run test:full
+```
+
+### Custom Commands
+
+The project includes custom Cypress commands in `cypress/support/commands.ts`:
+
+```typescript
+cy.waitForPageLoad()        // Wait for page load
+cy.waitForPageDataLoaded()  // Wait for data to load
+cy.waitForNetworkIdle()     // Wait for network requests
+```
+
+## Writing Tests
 
 ### Basic Test Structure
 
 ```typescript
-/// <reference types="cypress" />
-
-describe('Test Suite Name', () => {
+describe('Test Suite', () => {
   beforeEach(() => {
-    // Setup before each test
-    cy.visit('/some-page')
+    cy.waitForPageLoad()
   })
 
-  it('test case description', () => {
-    // Test steps
-    cy.get('[data-testid="some-element"]').should('be.visible')
-    cy.get('input').type('test data')
-    cy.get('button').click()
+  it('test case', () => {
+    cy.visit('/workspaces')
+    cy.get('[data-testid="some-element"]')
+      .should('be.visible')
+      .click()
   })
 })
 ```
 
-### Using Custom Commands
+### Best Practices
 
-The project has defined some custom commands, you can view and add them in `cypress/support/commands.ts`:
+1. Use `data-testid` attributes for selectors
+2. Each test should be independent
+3. Use `beforeEach` for setup, `afterEach` for cleanup
+4. Wait for page data to load before interactions
+5. Add meaningful assertions
 
-```typescript
-// Wait for page load to complete
-cy.waitForPageLoad()
+## Cross-Platform Notes
 
-// Login (example)
-cy.login('username', 'password')
-```
+### Script Implementation
 
-### Using Test Data
+The project includes **two sets of scripts**:
 
-Test data can be placed in the `cypress/fixtures/` directory:
+- **Node.js scripts** (`.js`) - Default, works on all platforms
+- **Bash scripts** (`.sh`) - Optional, for Unix-like systems
 
-```typescript
-cy.fixture('example.json').then((data) => {
-  cy.log(data.name)
-  cy.log(data.email)
-})
-```
-
-## Best Practices
-
-1. **Use Meaningful Selectors**
-   - Prioritize `data-testid` attributes
-   - Avoid volatile class or id selectors
-   
-2. **Maintain Test Independence**
-   - Each test should be able to run independently
-   - Don't depend on other tests' state
-
-3. **Use beforeEach for Initialization**
-   - Set up required initial state in `beforeEach`
-
-4. **Use Assertions Reasonably**
-   - Each test should have clear assertions
-   - Use meaningful assertion messages
-
-5. **Handle Async Operations**
-   - Cypress automatically waits for commands to complete
-   - Use `.should()` instead of `.then()` for assertions
-
-6. **Organize Test Cases**
-   - Organize test files by page or feature module
-   - Use `describe` for logical grouping
-
-## Common Commands
-
-### Automated Workflow Commands (Recommended)
+### Using Bash Scripts (Optional)
 
 ```bash
-# Complete test workflow (Setup + Test + Teardown)
-npm run test:full
-
-# E2E test workflow
-npm run test:e2e
-
-# Environment setup
-npm run setup
-
-# Environment cleanup
-npm run teardown        # Interactive (with confirmation prompt)
-npm run teardown:auto   # Automated (no prompt, for CI/CD)
-npm run cleanup         # Force cleanup (resolve conflicts)
+npm run setup:bash      # Use bash version
+npm run teardown:bash
+npm run cleanup:bash
 ```
 
-### Basic Test Commands
+### Path Handling
 
-```bash
-# Install dependencies
-npm install
+All scripts use Node.js `path` module for automatic path handling across platforms:
+- Windows: `C:\Users\...`
+- Unix: `/home/...`
 
-# Open Cypress Test Runner
-npm run cy:open
+## Tech Stack
 
-# Run all tests (headless mode)
-npm run cy:run
-
-# Run all tests (headed mode, Chrome)
-npm run test:headed
-
-# Run in Chrome browser
-npm run cy:run:chrome
-
-# Run in Firefox browser
-npm run cy:run:firefox
-```
-
-## Debugging Tips
-
-1. **Use Cypress Test Runner**
-   - Run `npm run cy:open` to open the GUI
-   - You can see each step's execution process
-
-2. **Use cy.debug()**
-   - Add `cy.debug()` in tests to pause execution
-
-3. **Use cy.pause()**
-   - Add `cy.pause()` in tests for manual control of execution
-
-4. **View Screenshots and Videos**
-   - Screenshots are automatically generated on test failure (`cypress/screenshots/`)
-   - Videos are generated for test runs (`cypress/videos/`)
-
-## Common Issues
-
-### 1. Port Conflict
-
-If the target application is not on port 8002, please modify `baseUrl` in `cypress.config.ts`.
-
-### 2. Timeout Issues
-
-If pages load slowly, you can increase the timeout in `cypress.config.ts`:
-
-```typescript
-defaultCommandTimeout: 20000,  // Increase to 20 seconds
-```
-
-### 3. TypeScript Type Errors
-
-Ensure all type definitions are installed:
-
-```bash
-npm install --save-dev @types/node
-```
-
-## Automation Testing Workflow
-
-This project supports a complete automation testing workflow:
-
-1. **Setup**: Download docker-compose.yml from Google Drive and start containers
-2. **Test**: Run all Cypress test cases
-3. **Teardown**: Automatically clean up Docker environment
-
-For detailed instructions, see [Automation Testing Workflow Guide](./AUTOMATION_GUIDE.md)
-
-## Cross-Platform Support
-
-This project is **fully compatible** with:
-- ✅ **macOS** (Intel & Apple Silicon)
-- ✅ **Windows** (Windows 10/11)
-- ✅ **Linux** (Ubuntu, Debian, Fedora, etc.)
-
-All npm commands work identically across all platforms. See [Platform Compatibility Guide](./PLATFORM_COMPATIBILITY.md) for details.
-
-### Platform-Specific Notes
-
-**Windows Users:**
-- All commands work in PowerShell, Command Prompt, or Git Bash
-- Docker Desktop must be running
-- No additional configuration needed
-
-**Linux Users:**
-- Ensure your user is in the `docker` group
-- All scripts work natively
-
-**macOS Users:**
-- Native support for both Bash and Node.js scripts
-- All features work out of the box
-
-## References
-
-### Project Documentation
-- 📘 [Automation Testing Workflow Guide](./AUTOMATION_GUIDE.md) - Setup/Teardown detailed instructions
-- 🖥️ [Platform Compatibility Guide](./PLATFORM_COMPATIBILITY.md) - Cross-platform support details
-
-### Official Documentation
-- [Cypress Official Documentation](https://docs.cypress.io/)
-- [Cypress TypeScript Support](https://docs.cypress.io/guides/tooling/typescript-support)
-- [Cypress Best Practices](https://docs.cypress.io/guides/references/best-practices)
-- [Docker Compose Documentation](https://docs.docker.com/compose/)
+- **Framework**: Cypress 13.17.0
+- **Language**: TypeScript 5.3.0
+- **Runtime**: Node.js v18+
+- **Containerization**: Docker Compose
+- **Platforms**: macOS, Windows 10/11, Linux
 
 ## License
 
 MIT
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Write tests
+4. Ensure all tests pass
+5. Submit a pull request
+
+## Support
+
+For issues or questions:
+- Check the [Troubleshooting](#troubleshooting) section
+- Review Cypress logs in `cypress/videos/` and `cypress/screenshots/`
+- Ensure Docker Desktop is running
+- Verify Node.js version: `node --version` (should be v18+)
+
+## Links
+
+- [Cypress Documentation](https://docs.cypress.io/)
+- [TypeScript Documentation](https://www.typescriptlang.org/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop)
+- [Kong Documentation](https://docs.konghq.com/)
