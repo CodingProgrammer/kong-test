@@ -5,7 +5,7 @@
  * Works on Mac, Windows, and Linux
  */
 
-const https = require('https');
+const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -25,38 +25,33 @@ const DOWNLOAD_URL = `https://drive.google.com/uc?export=download&id=${GOOGLE_DR
 console.log(`📍 Download URL: ${DOWNLOAD_URL}`);
 console.log(`📁 Save location: ${OUTPUT_FILE}`);
 
-const file = fs.createWriteStream(OUTPUT_FILE);
-
-https.get(DOWNLOAD_URL, (response) => {
-    // Handle redirects
-    if (response.statusCode === 302 || response.statusCode === 301) {
-        https.get(response.headers.location, (redirectResponse) => {
-            redirectResponse.pipe(file);
-
-            file.on('finish', () => {
-                file.close();
-                console.log('✅ docker-compose file downloaded successfully');
-                const stats = fs.statSync(OUTPUT_FILE);
-                console.log(`📄 File size: ${(stats.size / 1024).toFixed(2)} KB`);
-            });
-        }).on('error', (err) => {
-            fs.unlinkSync(OUTPUT_FILE);
-            console.error('❌ Download failed:', err.message);
-            process.exit(1);
-        });
-    } else {
-        response.pipe(file);
-
-        file.on('finish', () => {
-            file.close();
-            console.log('✅ docker-compose file downloaded successfully');
-            const stats = fs.statSync(OUTPUT_FILE);
-            console.log(`📄 File size: ${(stats.size / 1024).toFixed(2)} KB`);
-        });
+try {
+    // Remove old file if exists
+    if (fs.existsSync(OUTPUT_FILE)) {
+        fs.unlinkSync(OUTPUT_FILE);
     }
-}).on('error', (err) => {
-    fs.unlinkSync(OUTPUT_FILE);
-    console.error('❌ Download failed:', err.message);
+
+    // Use curl to download (more reliable for Google Drive)
+    execSync(`curl -L "${DOWNLOAD_URL}" -o "${OUTPUT_FILE}"`, { stdio: 'inherit' });
+
+    // Verify download
+    if (fs.existsSync(OUTPUT_FILE)) {
+        const stats = fs.statSync(OUTPUT_FILE);
+        if (stats.size === 0) {
+            throw new Error('Downloaded file is empty');
+        }
+        console.log('✅ docker-compose file downloaded successfully');
+        console.log(`📄 File size: ${(stats.size / 1024).toFixed(2)} KB`);
+    } else {
+        throw new Error('File not created after download');
+    }
+} catch (error) {
+    console.error('❌ Download failed:', error.message);
+    console.error('');
+    console.error('💡 Manual download:');
+    console.error('   1. Visit: https://drive.google.com/file/d/1ZqYLsFhcBAseFofEV8YCcOt4vZnItiBi/view');
+    console.error('   2. Download the file');
+    console.error(`   3. Save it to: ${OUTPUT_FILE}`);
     process.exit(1);
-});
+}
 
