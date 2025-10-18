@@ -38,14 +38,16 @@ npm run test:full
 ### Basic Commands
 
 ```bash
-# Complete workflow (recommended)
+# Complete workflow (recommended) - includes Kong setup
 npm run test:full
 
-# Run tests with HTML report
-npm run test:report
+# Run tests with HTML report (requires Kong to be running)
+npm run setup              # Start Kong first
+npm run test:report        # Run tests + generate report
 
-# Interactive GUI mode
-npm run cy:open
+# Interactive GUI mode (requires Kong to be running)
+npm run setup              # Start Kong first
+npm run cy:open            # Open Cypress GUI
 ```
 
 ### Docker Usage
