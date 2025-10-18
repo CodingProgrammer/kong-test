@@ -38,37 +38,37 @@ if (fs.existsSync(OUTPUT_FILE)) {
 function downloadWithNodeJS(url, outputPath) {
     return new Promise((resolve, reject) => {
         const file = fs.createWriteStream(outputPath);
-        
+
         https.get(url, (response) => {
             // Handle redirects
             if (response.statusCode === 302 || response.statusCode === 301) {
                 console.log('📍 Following redirect...');
                 https.get(response.headers.location, (redirectResponse) => {
                     redirectResponse.pipe(file);
-                    
+
                     file.on('finish', () => {
                         file.close();
                         resolve();
                     });
                 }).on('error', (err) => {
-                    fs.unlink(outputPath, () => {});
+                    fs.unlink(outputPath, () => { });
                     reject(err);
                 });
             } else {
                 response.pipe(file);
-                
+
                 file.on('finish', () => {
                     file.close();
                     resolve();
                 });
             }
         }).on('error', (err) => {
-            fs.unlink(outputPath, () => {});
+            fs.unlink(outputPath, () => { });
             reject(err);
         });
-        
+
         file.on('error', (err) => {
-            fs.unlink(outputPath, () => {});
+            fs.unlink(outputPath, () => { });
             reject(err);
         });
     });
@@ -83,10 +83,10 @@ function downloadWithCurl(url, outputPath) {
             // Use cross-platform curl command
             const quotedUrl = process.platform === 'win32' ? `"${url}"` : `'${url}'`;
             const quotedOutput = process.platform === 'win32' ? `"${outputPath}"` : `"${outputPath}"`;
-            
-            execSync(`curl -L ${quotedUrl} -o ${quotedOutput}`, { 
+
+            execSync(`curl -L ${quotedUrl} -o ${quotedOutput}`, {
                 stdio: 'inherit',
-                windowsHide: true 
+                windowsHide: true
             });
             resolve();
         } catch (error) {
@@ -100,7 +100,7 @@ function downloadWithCurl(url, outputPath) {
  */
 async function downloadFile() {
     let downloadSuccess = false;
-    
+
     // Method 1: Try curl (faster)
     try {
         console.log('🔄 Method 1: Trying curl...');
@@ -109,7 +109,7 @@ async function downloadFile() {
         console.log('✅ Downloaded using curl');
     } catch (curlError) {
         console.log('⚠️  curl not available or failed, trying alternative method...');
-        
+
         // Method 2: Use Node.js https module
         try {
             console.log('🔄 Method 2: Using Node.js https module...');
@@ -120,17 +120,17 @@ async function downloadFile() {
             throw new Error(`All download methods failed. curl: ${curlError.message}, https: ${httpsError.message}`);
         }
     }
-    
+
     // Verify download
     if (!fs.existsSync(OUTPUT_FILE)) {
         throw new Error('File not created after download');
     }
-    
+
     const stats = fs.statSync(OUTPUT_FILE);
     if (stats.size === 0) {
         throw new Error('Downloaded file is empty');
     }
-    
+
     console.log('✅ docker-compose file downloaded successfully');
     console.log(`📄 File size: ${(stats.size / 1024).toFixed(2)} KB`);
 }

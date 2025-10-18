@@ -24,7 +24,7 @@ services:
     environment:
       POSTGRES_USER: kong
       POSTGRES_DB: kong
-      POSTGRES_PASSWORD: kongpass
+      POSTGRES_PASSWORD: kong
     ports:
       - "5432:5432"
     networks:
@@ -37,14 +37,14 @@ services:
 
   # Kong Migrations (run database setup)
   kong-migrations:
-    image: kong/kong-gateway:3.4
+    image: kong/kong-gateway
     container_name: kong-migrations
     command: kong migrations bootstrap
     environment:
       KONG_DATABASE: postgres
       KONG_PG_HOST: kong-database
       KONG_PG_USER: kong
-      KONG_PG_PASSWORD: kongpass
+      KONG_PG_PASSWORD: kong
       KONG_PG_DATABASE: kong
     networks:
       - kong-network
@@ -55,21 +55,36 @@ services:
 
   # Kong Gateway
   kong-admin:
-    image: kong/kong-gateway:3.4
+    image: kong/kong-gateway
     container_name: kong-gateway
+    restart: on-failure
+    user: root
     environment:
+      # Logging
+      KONG_PROXY_ACCESS_LOG: '/dev/stdout'
+      KONG_ADMIN_ACCESS_LOG: '/dev/stdout'
+      KONG_PROXY_ERROR_LOG: '/dev/stderr'
+      KONG_ADMIN_ERROR_LOG: '/dev/stderr'
+      # Database
       KONG_DATABASE: postgres
       KONG_PG_HOST: kong-database
       KONG_PG_USER: kong
-      KONG_PG_PASSWORD: kongpass
+      KONG_PG_PASSWORD: kong
       KONG_PG_DATABASE: kong
-      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      # Enterprise Mode (Critical!)
+      KONG_PASSWORD: 'handyshake'
+      # Admin GUI
+      KONG_ADMIN_GUI_URL: 'http://localhost:8002'
+      # Listeners
+      KONG_ADMIN_LISTEN: '0.0.0.0:8001, 0.0.0.0:8444 ssl'
       KONG_ADMIN_GUI_LISTEN: 0.0.0.0:8002
-      KONG_PROXY_LISTEN: 0.0.0.0:8000
+      KONG_PROXY_LISTEN: '0.0.0.0:8000, 0.0.0.0:8443 ssl'
     ports:
       - "8000:8000"
       - "8001:8001"
       - "8002:8002"
+      - "8443:8443"
+      - "8444:8444"
     networks:
       - kong-network
     depends_on:
