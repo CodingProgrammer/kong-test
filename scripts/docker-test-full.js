@@ -13,6 +13,26 @@ const fs = require('fs');
 const PROJECT_DIR = path.join(__dirname, '..');
 const COMPOSE_FILE = path.join(PROJECT_DIR, 'docker-compose.test.yml');
 
+// Detect which docker-compose command to use
+function getDockerComposeCommand() {
+    try {
+        execSync('docker compose version', { stdio: 'ignore' });
+        return 'docker compose';
+    } catch (error) {
+        try {
+            execSync('docker-compose --version', { stdio: 'ignore' });
+            return 'docker-compose';
+        } catch (error) {
+            console.error('❌ Neither "docker compose" nor "docker-compose" is available');
+            console.error('Please install Docker Desktop or Docker Compose');
+            process.exit(1);
+        }
+    }
+}
+
+const DOCKER_COMPOSE = getDockerComposeCommand();
+console.log(`📦 Using: ${DOCKER_COMPOSE}`);
+
 console.log('🐳 Running Complete Test Environment...');
 console.log('================================================');
 console.log('This will:');
@@ -38,7 +58,7 @@ const cleanup = () => {
     console.log('');
     console.log('🧹 Cleaning up containers...');
     try {
-        execSync(`docker-compose -f docker-compose.test.yml down -v`, { stdio: 'inherit' });
+        execSync(`${DOCKER_COMPOSE} -f docker-compose.test.yml down -v`, { stdio: 'inherit' });
     } catch (error) {
         console.error('⚠️  Cleanup failed (may be already cleaned)');
     }
@@ -62,11 +82,11 @@ process.on('SIGTERM', () => { exitCode = 1; process.exit(); });
 try {
     // Build images
     console.log('🔨 Building images...');
-    execSync(`docker-compose -f docker-compose.test.yml build`, { stdio: 'inherit' });
+    execSync(`${DOCKER_COMPOSE} -f docker-compose.test.yml build`, { stdio: 'inherit' });
     
     console.log('');
     console.log('🚀 Starting services...');
-    execSync(`docker-compose -f docker-compose.test.yml up -d kong-database kong-admin`, { stdio: 'inherit' });
+    execSync(`${DOCKER_COMPOSE} -f docker-compose.test.yml up -d kong-database kong-admin`, { stdio: 'inherit' });
     
     console.log('');
     console.log('⏳ Waiting for Kong to be ready (may take up to 60 seconds)...');
@@ -109,7 +129,7 @@ function runTests() {
     console.log('');
     
     try {
-        execSync(`docker-compose -f docker-compose.test.yml run --rm cypress`, { stdio: 'inherit' });
+        execSync(`${DOCKER_COMPOSE} -f docker-compose.test.yml run --rm cypress`, { stdio: 'inherit' });
         
         console.log('');
         console.log('✅ All tests passed!');
