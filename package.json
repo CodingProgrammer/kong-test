@@ -1,0 +1,38 @@
+{
+    "name": "kong-test-cypress",
+    "version": "1.0.0",
+    "description": "Kong UI Automation Testing Project - Using Cypress + TypeScript",
+    "main": "index.js",
+    "scripts": {
+        "cy:open": "cypress open",
+        "cy:run": "cypress run",
+        "cy:run:chrome": "cypress run --browser chrome",
+        "cy:run:firefox": "cypress run --browser firefox",
+        "cy:run:headed": "cypress run --headed",
+        "test": "cypress run",
+        "test:headed": "cypress run --headed --browser chrome",
+        "setup": "node scripts/setup.js",
+        "teardown": "node scripts/teardown.js",
+        "teardown:auto": "node scripts/teardown-auto.js",
+        "cleanup": "node scripts/cleanup.js",
+        "test:full": "node scripts/run-tests.js",
+        "test:e2e": "npm run setup && npm run cy:run && npm run teardown:auto",
+        "setup:bash": "bash scripts/setup.sh",
+        "teardown:bash": "bash scripts/teardown.sh",
+        "cleanup:bash": "bash scripts/force-cleanup.sh"
+    },
+    "keywords": [
+        "cypress",
+        "typescript",
+        "e2e",
+        "ui-testing",
+        "automation"
+    ],
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "^20.10.0",
+        "cypress": "^13.6.0",
+        "typescript": "^5.3.0"
+    }
+}
