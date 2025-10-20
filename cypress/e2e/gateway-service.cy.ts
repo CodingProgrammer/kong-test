@@ -6,49 +6,49 @@
  * Robust implementation with multiple fallback strategies
  */
 const clickCreateServiceButton = () => {
-    cy.log('🔍 Detecting service list state...')
-    
+    cy.log('Detecting service list state...')
+
     cy.get('body').then(($body) => {
         // Strategy 1: Check for empty state indicators
         const hasEmptyStateButton = $body.find('[data-testid="empty-state-action"]').length > 0
-        const hasEmptyStateText = $body.text().includes('Create your first service') || 
-                                  $body.text().includes('No Gateway Services exist')
+        const hasEmptyStateText = $body.text().includes('Create your first service') ||
+            $body.text().includes('No Gateway Services exist')
         const hasEmptyStateIcon = $body.find('[data-testid="empty-state"]').length > 0
         const hasEmptyStateTitle = $body.find('.empty-state-title').length > 0
-        
+
         // Check if toolbar button exists
         const hasToolbarButton = $body.find('[data-testid="toolbar-add-gateway-service"]').length > 0
-        
-        cy.log(`📊 Detection results:
+
+        cy.log(`Detection results:
             - Empty state button: ${hasEmptyStateButton}
             - Empty state text: ${hasEmptyStateText}
             - Empty state icon: ${hasEmptyStateIcon}
             - Empty state title: ${hasEmptyStateTitle}
             - Toolbar button: ${hasToolbarButton}`)
-        
+
         // Determine which button to use
         const isEmptyState = hasEmptyStateButton || hasEmptyStateText || hasEmptyStateIcon || hasEmptyStateTitle
-        
+
         if (isEmptyState && !hasToolbarButton) {
             // Empty state: use empty-state-action button
-            cy.log('✅ Service list is EMPTY - using empty-state-action button')
+            cy.log('Service list is EMPTY - using empty-state-action button')
             cy.get('[data-testid="empty-state-action"]', { timeout: 10000 })
                 .should('be.visible')
                 .should('not.be.disabled')
                 .click({ force: false })
-            cy.log('✅ Clicked empty-state-action button')
+            cy.log('Clicked empty-state-action button')
         } else if (hasToolbarButton) {
             // Non-empty state: use toolbar button
-            cy.log('✅ Service list is NOT EMPTY - using toolbar-add-gateway-service button')
+            cy.log('Service list is NOT EMPTY - using toolbar-add-gateway-service button')
             cy.get('[data-testid="toolbar-add-gateway-service"]', { timeout: 10000 })
                 .should('be.visible')
                 .should('not.be.disabled')
                 .click({ force: false })
-            cy.log('✅ Clicked toolbar-add-gateway-service button')
+            cy.log('Clicked toolbar-add-gateway-service button')
         } else {
             // Fallback: try all possible selectors
-            cy.log('⚠️  Using fallback strategy...')
-            
+            cy.log('Using fallback strategy...')
+
             cy.get('body').then(($fallbackBody) => {
                 const selectors = [
                     '[data-testid="empty-state-action"]',
@@ -58,28 +58,28 @@ const clickCreateServiceButton = () => {
                     'button:contains("New Gateway Service")',
                     'a[href*="/services/create"]'
                 ]
-                
+
                 let clicked = false
                 for (const selector of selectors) {
                     if ($fallbackBody.find(selector).length > 0) {
-                        cy.log(`✅ Found fallback selector: ${selector}`)
+                        cy.log(`Found fallback selector: ${selector}`)
                         cy.get(selector).first().click({ force: false })
                         clicked = true
                         break
                     }
                 }
-                
+
                 if (!clicked) {
-                    cy.log('❌ No create button found, trying generic button search')
+                    cy.log('No create button found, trying generic button search')
                     cy.get('button').contains(/New|Add|Create/i).first().click({ force: false })
                 }
             })
         }
     })
-    
+
     // Wait for navigation to complete
     cy.wait(500)
-    cy.log('✅ Create service button clicked successfully')
+    cy.log('Create service button clicked successfully')
 }
 
 /**
@@ -87,7 +87,7 @@ const clickCreateServiceButton = () => {
  * @param routeName - Route name
  */
 const deleteRoute = (routeName: string) => {
-    cy.log(`🗑️ Starting to delete Route: ${routeName}`)
+    cy.log(`Starting to delete Route: ${routeName}`)
 
     cy.get(`[data-testid="${routeName}"]`)
         .should('be.visible')
@@ -112,7 +112,7 @@ const deleteRoute = (routeName: string) => {
         .should('contain', routeName)
         .should('contain', 'successfully deleted!')
 
-    cy.log(`✅ Route ${routeName} deleted successfully`)
+    cy.log(`Route ${routeName} deleted successfully`)
 }
 
 describe('Gateway Service Management Tests', () => {
@@ -199,12 +199,12 @@ describe('Gateway Service Management Tests', () => {
         // Verify license warning message (optional - may not appear in all environments)
         cy.get('body').then(($body) => {
             if ($body.find('.alert-message').length > 0) {
-                cy.log('✅ License warning found')
+                cy.log('License warning found')
                 cy.get('.alert-message')
                     .should('be.visible')
                     .should('contain', 'No valid Kong Enterprise license configured')
             } else {
-                cy.log('ℹ️  No license warning (may be licensed or different environment)')
+                cy.log('No license warning (may be licensed or different environment)')
             }
         })
 
@@ -290,12 +290,12 @@ describe('Gateway Service Management Tests', () => {
         // Verify license warning message (optional - may not appear in all environments)
         cy.get('body').then(($body) => {
             if ($body.find('.alert-message').length > 0) {
-                cy.log('✅ License warning found')
+                cy.log('License warning found')
                 cy.get('.alert-message')
                     .should('be.visible')
                     .should('contain', 'No valid Kong Enterprise license configured')
             } else {
-                cy.log('ℹ️  No license warning (may be licensed or different environment)')
+                cy.log('No license warning (may be licensed or different environment)')
             }
         })
 
@@ -344,12 +344,12 @@ describe('Gateway Service Management Tests', () => {
         // Verify license warning message (optional - may not appear in all environments)
         cy.get('body').then(($body) => {
             if ($body.find('.alert-message').length > 0) {
-                cy.log('✅ License warning found')
+                cy.log('License warning found')
                 cy.get('.alert-message')
                     .should('be.visible')
                     .should('contain', 'No valid Kong Enterprise license configured')
             } else {
-                cy.log('ℹ️  No license warning (may be licensed or different environment)')
+                cy.log('No license warning (may be licensed or different environment)')
             }
         })
 
@@ -416,12 +416,12 @@ describe('Gateway Service Management Tests', () => {
         // Verify license warning message (optional - may not appear in all environments)
         cy.get('body').then(($body) => {
             if ($body.find('.alert-message').length > 0) {
-                cy.log('✅ License warning found')
+                cy.log('License warning found')
                 cy.get('.alert-message')
                     .should('be.visible')
                     .should('contain', 'No valid Kong Enterprise license configured')
             } else {
-                cy.log('ℹ️  No license warning (may be licensed or different environment)')
+                cy.log('No license warning (may be licensed or different environment)')
             }
         })
 

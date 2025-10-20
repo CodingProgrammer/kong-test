@@ -14,8 +14,8 @@ const GOOGLE_DRIVE_FILE_ID = '1ZqYLsFhcBAseFofEV8YCcOt4vZnItiBi';
 const DOWNLOAD_DIR = path.join(__dirname, '..', 'docker');
 const OUTPUT_FILE = path.join(DOWNLOAD_DIR, 'docker-compose.yml');
 
-console.log('📥 Starting to download docker-compose file...');
-console.log(`🖥️  Platform: ${process.platform}`);
+console.log('Starting to download docker-compose file...');
+console.log(` Platform: ${process.platform}`);
 
 // Create docker directory if it doesn't exist
 if (!fs.existsSync(DOWNLOAD_DIR)) {
@@ -25,7 +25,7 @@ if (!fs.existsSync(DOWNLOAD_DIR)) {
 const DOWNLOAD_URL = `https://drive.google.com/uc?export=download&id=${GOOGLE_DRIVE_FILE_ID}`;
 
 console.log(`📍 Download URL: ${DOWNLOAD_URL}`);
-console.log(`📁 Save location: ${OUTPUT_FILE}`);
+console.log(`Save location: ${OUTPUT_FILE}`);
 
 // Remove old file if exists
 if (fs.existsSync(OUTPUT_FILE)) {
@@ -103,19 +103,19 @@ async function downloadFile() {
 
     // Method 1: Try curl (faster)
     try {
-        console.log('🔄 Method 1: Trying curl...');
+        console.log('Method 1: Trying curl...');
         await downloadWithCurl(DOWNLOAD_URL, OUTPUT_FILE);
         downloadSuccess = true;
-        console.log('✅ Downloaded using curl');
+        console.log('Downloaded using curl');
     } catch (curlError) {
-        console.log('⚠️  curl not available or failed, trying alternative method...');
+        console.log('curl not available or failed, trying alternative method...');
 
         // Method 2: Use Node.js https module
         try {
-            console.log('🔄 Method 2: Using Node.js https module...');
+            console.log('Method 2: Using Node.js https module...');
             await downloadWithNodeJS(DOWNLOAD_URL, OUTPUT_FILE);
             downloadSuccess = true;
-            console.log('✅ Downloaded using Node.js https');
+            console.log('Downloaded using Node.js https');
         } catch (httpsError) {
             throw new Error(`All download methods failed. curl: ${curlError.message}, https: ${httpsError.message}`);
         }
@@ -131,17 +131,17 @@ async function downloadFile() {
         throw new Error('Downloaded file is empty');
     }
 
-    console.log('✅ docker-compose file downloaded successfully');
-    console.log(`📄 File size: ${(stats.size / 1024).toFixed(2)} KB`);
+    console.log('docker-compose file downloaded successfully');
+    console.log(`File size: ${(stats.size / 1024).toFixed(2)} KB`);
 }
 
 // Execute download
 downloadFile().catch(error => {
     console.error('');
-    console.error('❌ Download failed:', error.message);
+    console.error('Download failed:', error.message);
     console.error('');
     console.error('═══════════════════════════════════════════════════════════');
-    console.error('💡 Manual Download Instructions:');
+    console.error('Manual Download Instructions:');
     console.error('═══════════════════════════════════════════════════════════');
     console.error('');
     console.error('Option 1: Direct Download');

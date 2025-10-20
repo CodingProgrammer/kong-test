@@ -25,13 +25,13 @@ function cleanup() {
     console.log('================================================');
 
     if (exitCode === 0) {
-        console.log(`${colors.green}✅ Test workflow completed${colors.reset}`);
+        console.log(`${colors.green}Test workflow completed${colors.reset}`);
     } else {
-        console.log(`${colors.red}❌ Test workflow failed (exit code: ${exitCode})${colors.reset}`);
+        console.log(`${colors.red}Test workflow failed (exit code: ${exitCode})${colors.reset}`);
     }
 
     console.log('');
-    console.log('🧹 Executing Teardown...');
+    console.log('Executing Teardown...');
 
     try {
         execSync('node ' + path.join(__dirname, 'teardown-auto.js'), { stdio: 'inherit' });
@@ -55,12 +55,12 @@ process.on('SIGTERM', () => {
 });
 
 console.log('================================================');
-console.log('🎯 Kong UI Automation Test Complete Workflow');
+console.log('Kong UI Automation Test Complete Workflow');
 console.log('================================================');
 
 // Step 1: Setup
 console.log('');
-console.log(`${colors.yellow}📋 Phase 1/3: Setup${colors.reset}`);
+console.log(`${colors.yellow}Phase 1/3: Setup${colors.reset}`);
 try {
     execSync('node ' + path.join(__dirname, 'setup.js'), { stdio: 'inherit' });
 } catch (error) {
@@ -72,7 +72,7 @@ try {
 setTimeout(() => {
     // Step 2: Run tests
     console.log('');
-    console.log(`${colors.yellow}📋 Phase 2/3: Run Tests${colors.reset}`);
+    console.log(`${colors.yellow}Phase 2/3: Run Tests${colors.reset}`);
     console.log('================================================');
 
     const projectDir = path.join(__dirname, '..');
@@ -86,7 +86,7 @@ setTimeout(() => {
 
     // Step 3: Teardown (handled by cleanup function)
     console.log('');
-    console.log(`${colors.yellow}📋 Phase 3/3: Teardown${colors.reset}`);
+    console.log(`${colors.yellow}Phase 3/3: Teardown${colors.reset}`);
     console.log('Will be executed automatically on exit...');
 }, 1000);
 

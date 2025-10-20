@@ -19,20 +19,20 @@ console.log('================================================');
 process.chdir(PROJECT_DIR);
 
 // Check if Kong is running on host
-console.log('🔍 Checking if Kong is running...');
+console.log('Checking if Kong is running...');
 try {
     const http = require('http');
     http.get('http://localhost:8002', (res) => {
         if (res.statusCode === 200) {
-            console.log('✅ Kong is running on http://localhost:8002');
+            console.log('Kong is running on http://localhost:8002');
             runTests();
         } else {
-            console.error('⚠️  Kong is not responding correctly');
+            console.error('Kong is not responding correctly');
             console.log('Please start Kong first: npm run setup');
             process.exit(1);
         }
     }).on('error', (err) => {
-        console.error('❌ Cannot connect to Kong on http://localhost:8002');
+        console.error('Cannot connect to Kong on http://localhost:8002');
         console.log('');
         console.log('Please start Kong first:');
         console.log('  npm run setup');
@@ -42,13 +42,13 @@ try {
         process.exit(1);
     });
 } catch (error) {
-    console.error('❌ Failed to check Kong status');
+    console.error('Failed to check Kong status');
     process.exit(1);
 }
 
 function runTests() {
     console.log('');
-    console.log('🧪 Running tests...');
+    console.log('Running tests...');
     console.log('');
     
     try {
@@ -68,14 +68,14 @@ function runTests() {
         
         console.log('');
         console.log('================================================');
-        console.log('✅ Tests completed!');
+        console.log('Tests completed!');
         console.log('');
         console.log('📹 Videos saved to: ./cypress/videos/');
         console.log('📸 Screenshots saved to: ./cypress/screenshots/');
         console.log('================================================');
         
     } catch (error) {
-        console.error('❌ Tests failed or were interrupted');
+        console.error('Tests failed or were interrupted');
         process.exit(1);
     }
 }

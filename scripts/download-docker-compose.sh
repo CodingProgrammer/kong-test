@@ -9,7 +9,7 @@ GOOGLE_DRIVE_FILE_ID="1ZqYLsFhcBAseFofEV8YCcOt4vZnItiBi"
 OUTPUT_FILE="docker-compose.yml"
 DOWNLOAD_DIR="./docker"
 
-echo "📥 Starting to download docker-compose file..."
+echo "Starting to download docker-compose file..."
 
 # Create docker directory (if it doesn't exist)
 mkdir -p "$DOWNLOAD_DIR"
@@ -19,7 +19,7 @@ mkdir -p "$DOWNLOAD_DIR"
 DOWNLOAD_URL="https://drive.google.com/uc?export=download&id=${GOOGLE_DRIVE_FILE_ID}"
 
 echo "📍 Download URL: ${DOWNLOAD_URL}"
-echo "📁 Save location: ${DOWNLOAD_DIR}/${OUTPUT_FILE}"
+echo "Save location: ${DOWNLOAD_DIR}/${OUTPUT_FILE}"
 
 # Download file
 if command -v curl &> /dev/null; then
@@ -27,16 +27,16 @@ if command -v curl &> /dev/null; then
 elif command -v wget &> /dev/null; then
     wget -O "${DOWNLOAD_DIR}/${OUTPUT_FILE}" "${DOWNLOAD_URL}"
 else
-    echo "❌ Error: curl or wget command not found"
+    echo "Error: curl or wget command not found"
     exit 1
 fi
 
 # Check if file was downloaded successfully
 if [ -f "${DOWNLOAD_DIR}/${OUTPUT_FILE}" ]; then
-    echo "✅ docker-compose file downloaded successfully"
-    echo "📄 File size: $(du -h ${DOWNLOAD_DIR}/${OUTPUT_FILE} | cut -f1)"
+    echo "docker-compose file downloaded successfully"
+    echo "File size: $(du -h ${DOWNLOAD_DIR}/${OUTPUT_FILE} | cut -f1)"
 else
-    echo "❌ Download failed"
+    echo "Download failed"
     exit 1
 fi
 

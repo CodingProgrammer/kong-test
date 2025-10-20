@@ -10,11 +10,11 @@ const path = require('path');
 
 const HTML_REPORT_PATH = path.join(__dirname, '..', 'cypress', 'reports', 'html', 'merged-report.html');
 
-console.log('🌐 Opening Test Report...');
+console.log('Opening Test Report...');
 
 // Check if report exists
 if (!fs.existsSync(HTML_REPORT_PATH)) {
-    console.error('❌ Report not found!');
+    console.error('Report not found!');
     console.error('');
     console.error('Please generate the report first:');
     console.error('  npm run report:generate');
@@ -37,10 +37,10 @@ try {
         execSync(`xdg-open "${HTML_REPORT_PATH}"`);
     }
     
-    console.log('✅ Report opened in browser');
-    console.log(`📄 ${HTML_REPORT_PATH}`);
+    console.log('Report opened in browser');
+    console.log(`${HTML_REPORT_PATH}`);
 } catch (error) {
-    console.error('❌ Failed to open report:', error.message);
+    console.error('Failed to open report:', error.message);
     console.error('');
     console.error('Please open manually:');
     console.error(`   ${HTML_REPORT_PATH}`);

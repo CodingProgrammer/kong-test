@@ -23,7 +23,7 @@ function getDockerComposeCommand() {
             execSync('docker-compose --version', { stdio: 'ignore' });
             return 'docker-compose';
         } catch (error) {
-            console.error('❌ Neither "docker compose" nor "docker-compose" is available');
+            console.error('Neither "docker compose" nor "docker-compose" is available');
             console.error('Please install Docker Desktop or Docker Compose');
             process.exit(1);
         }
@@ -47,7 +47,7 @@ process.chdir(PROJECT_DIR);
 
 // Check if docker-compose.test.yml exists
 if (!fs.existsSync(COMPOSE_FILE)) {
-    console.error('❌ docker-compose.test.yml not found');
+    console.error('docker-compose.test.yml not found');
     process.exit(1);
 }
 
@@ -56,19 +56,19 @@ let exitCode = 0;
 // Cleanup function
 const cleanup = () => {
     console.log('');
-    console.log('🧹 Cleaning up containers...');
+    console.log('Cleaning up containers...');
     try {
         execSync(`${DOCKER_COMPOSE} -f docker-compose.test.yml down -v`, { stdio: 'inherit' });
     } catch (error) {
-        console.error('⚠️  Cleanup failed (may be already cleaned)');
+        console.error('Cleanup failed (may be already cleaned)');
     }
     
     console.log('');
     console.log('================================================');
     if (exitCode === 0) {
-        console.log('✅ Test workflow completed successfully!');
+        console.log('Test workflow completed successfully!');
     } else {
-        console.log('❌ Test workflow failed');
+        console.log('Test workflow failed');
     }
     console.log('================================================');
     process.exit(exitCode);
@@ -85,7 +85,7 @@ try {
     execSync(`${DOCKER_COMPOSE} -f docker-compose.test.yml build`, { stdio: 'inherit' });
     
     console.log('');
-    console.log('🚀 Starting services...');
+    console.log('Starting services...');
     execSync(`${DOCKER_COMPOSE} -f docker-compose.test.yml up -d kong-database kong-admin`, { stdio: 'inherit' });
     
     console.log('');
@@ -98,14 +98,14 @@ try {
     
     const waitForKong = () => {
         if (waited >= maxWait) {
-            console.error('❌ Kong did not start in time');
+            console.error('Kong did not start in time');
             exitCode = 1;
             process.exit(1);
         }
         
         try {
             execSync('docker exec kong-gateway kong health', { stdio: 'ignore' });
-            console.log('✅ Kong is ready!');
+            console.log('Kong is ready!');
             runTests();
         } catch (error) {
             waited += checkInterval;
@@ -117,7 +117,7 @@ try {
     waitForKong();
     
 } catch (error) {
-    console.error('❌ Failed to start environment');
+    console.error('Failed to start environment');
     console.error(error.message);
     exitCode = 1;
     process.exit(1);
@@ -125,14 +125,14 @@ try {
 
 function runTests() {
     console.log('');
-    console.log('🧪 Running Cypress tests...');
+    console.log('Running Cypress tests...');
     console.log('');
     
     try {
         execSync(`${DOCKER_COMPOSE} -f docker-compose.test.yml run --rm cypress`, { stdio: 'inherit' });
         
         console.log('');
-        console.log('✅ All tests passed!');
+        console.log('All tests passed!');
         console.log('');
         console.log('📹 Videos saved to: ./cypress/videos/');
         console.log('📸 Screenshots saved to: ./cypress/screenshots/');
@@ -142,7 +142,7 @@ function runTests() {
         
     } catch (error) {
         console.error('');
-        console.error('❌ Tests failed');
+        console.error('Tests failed');
         exitCode = 1;
         process.exit(1);
     }

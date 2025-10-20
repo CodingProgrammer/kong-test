@@ -77,14 +77,14 @@ describe('Gateway Service - POM Example', () => {
             if (name) {
                 serviceName = name
                 cy.wrap(serviceName).as('serviceName')
-                cy.log(`✅ Service created: ${serviceName}`)
+                cy.log(`Service created: ${serviceName}`)
             }
         })
 
         // Step 9: Close toaster
         servicePage.closeToaster()
 
-        cy.log('✅ Test completed successfully')
+        cy.log('Test completed successfully')
     })
 
     it('should show error for invalid URL - using Page Objects', function () {
@@ -106,7 +106,7 @@ describe('Gateway Service - POM Example', () => {
         // Verify error message
         servicePage.verifyFormError(this.testData.messages.errors.urlInvalid)
 
-        cy.log('✅ Validation working as expected')
+        cy.log('Validation working as expected')
     })
 
     it('should show error for empty URL - using Page Objects', function () {
@@ -124,7 +124,7 @@ describe('Gateway Service - POM Example', () => {
         // Verify error message
         servicePage.verifyFormError(this.testData.messages.errors.urlRequired)
 
-        cy.log('✅ Required field validation working')
+        cy.log('Required field validation working')
     })
 
     it('should create service with route - using Page Objects', function () {
@@ -158,13 +158,13 @@ describe('Gateway Service - POM Example', () => {
             if (name) {
                 serviceName = name
                 cy.wrap(serviceName).as('serviceName')
-                cy.log(`✅ Service with route created: ${serviceName}`)
+                cy.log(`Service with route created: ${serviceName}`)
             }
         })
 
         servicePage.closeToaster()
 
-        cy.log('✅ Service with route created successfully')
+        cy.log('Service with route created successfully')
     })
 
     // Example: Chaining page object methods
@@ -200,7 +200,7 @@ describe('Gateway Service - POM Example', () => {
 
         servicePage.closeToaster()
 
-        cy.log('✅ Method chaining works perfectly')
+        cy.log('Method chaining works perfectly')
     })
 })
 

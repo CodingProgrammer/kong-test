@@ -85,7 +85,7 @@ export class BasePage {
                     .should('be.visible')
                     .should('contain', expectedText)
             } else {
-                cy.log('ℹ️  No alert message found (may be different environment)')
+                cy.log('No alert message found (may be different environment)')
             }
         })
         return this

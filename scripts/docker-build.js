@@ -28,13 +28,13 @@ try {
     
     console.log('');
     console.log('================================================');
-    console.log('✅ Docker image built successfully!');
+    console.log('Docker image built successfully!');
     console.log('');
-    console.log('📊 Image Information:');
+    console.log('Image Information:');
     execSync(`docker images ${IMAGE_NAME}`, { stdio: 'inherit' });
     
     console.log('');
-    console.log('📝 Next Steps:');
+    console.log('Next Steps:');
     console.log('');
     console.log('1️⃣  Run tests with existing Kong:');
     console.log('   npm run docker:test');
@@ -49,7 +49,7 @@ try {
     console.log('================================================');
     
 } catch (error) {
-    console.error('❌ Failed to build Docker image');
+    console.error('Failed to build Docker image');
     console.error(error.message);
     process.exit(1);
 }

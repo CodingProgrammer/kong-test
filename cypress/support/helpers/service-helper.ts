@@ -33,7 +33,7 @@ export function createServiceWithUrl(url: string): Cypress.Chainable<string> {
     return servicePage.extractFromToaster(/new-service-\d+/).then((name) => {
         if (name) {
             cy.wrap(name).as('serviceName')
-            cy.log(`✅ Service created: ${name}`)
+            cy.log(`Service created: ${name}`)
             return name
         }
         throw new Error('Failed to extract service name')
@@ -56,7 +56,7 @@ export function createServiceWithRoute(serviceUrl: string, routeName: string, ro
     return servicePage.extractFromToaster(/new-service-\d+/).then((name) => {
         if (name) {
             cy.wrap(name).as('serviceName')
-            cy.log(`✅ Service with route created: ${name}`)
+            cy.log(`Service with route created: ${name}`)
             return name
         }
         throw new Error('Failed to extract service name')

@@ -12,13 +12,13 @@
 
 ## Features
 
-- 🎯 Page Object Model architecture
-- 🔄 One-command execution (Setup → Test → Report → Teardown)
-- 📊 HTML reports with screenshots & videos
+- Page Object Model architecture
+- One-command execution (Setup → Test → Report → Teardown)
+- HTML reports with screenshots & videos
 - 🐳 Docker support
-- 🌍 Cross-platform (macOS, Windows, Linux)
-- ✅ 100+ test scenarios (4 implemented, 96 TODO)
-- 🛠️ Reusable components (Page Objects, helpers, utilities)
+- Cross-platform (macOS, Windows, Linux)
+- 100+ test scenarios (4 implemented, 96 TODO)
+- Reusable components (Page Objects, helpers, utilities)
 
 ## Quick Start
 
@@ -43,10 +43,10 @@ npm run test:full
 ## Test Coverage
 
 **Implemented (4 tests)**:
-- ✅ Create Gateway Service
-- ✅ Create Service with Wrong URL
-- ✅ Create Service with Invalid Form
-- ✅ Create Service with Routes
+- Create Gateway Service
+- Create Service with Wrong URL
+- Create Service with Invalid Form
+- Create Service with Routes
 
 **TODO (96 tests)**: See `cypress/e2e/gateway-service.cy.ts` for complete list covering:
 - CRUD Operations (8)

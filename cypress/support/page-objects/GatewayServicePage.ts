@@ -16,10 +16,10 @@ export class GatewayServicePage extends BasePage {
             const hasEmptyStateIcon = $body.find('[data-testid="empty-state"]').length > 0
 
             if (hasEmptyState || hasEmptyStateText || hasEmptyStateIcon) {
-                cy.log('✅ Service list is empty, using empty-state-action button')
+                cy.log('Service list is empty, using empty-state-action button')
                 this.clickByTestId('empty-state-action')
             } else {
-                cy.log('✅ Service list is not empty, using toolbar-add-gateway-service button')
+                cy.log('Service list is not empty, using toolbar-add-gateway-service button')
                 cy.get('body').then(($body) => {
                     const toolbarButton = $body.find('[data-testid="toolbar-add-gateway-service"]')
                     const addButton = $body.find('[data-testid="add-gateway-service"]')
@@ -134,7 +134,7 @@ export class GatewayServicePage extends BasePage {
      * Delete a service by name
      */
     deleteService(serviceName: string) {
-        cy.log(`🗑️ Starting to delete Service: ${serviceName}`)
+        cy.log(`Starting to delete Service: ${serviceName}`)
 
         this.getByTestId(serviceName)
             .should('be.visible')
@@ -153,7 +153,7 @@ export class GatewayServicePage extends BasePage {
         this.verifyToasterMessage([serviceName, 'successfully deleted!'])
         this.closeToaster()
 
-        cy.log(`✅ Service ${serviceName} deleted successfully`)
+        cy.log(`Service ${serviceName} deleted successfully`)
         return this
     }
 
@@ -161,7 +161,7 @@ export class GatewayServicePage extends BasePage {
      * Delete a route by name
      */
     deleteRoute(routeName: string) {
-        cy.log(`🗑️ Starting to delete Route: ${routeName}`)
+        cy.log(`Starting to delete Route: ${routeName}`)
 
         this.getByTestId(routeName)
             .should('be.visible')
@@ -177,7 +177,7 @@ export class GatewayServicePage extends BasePage {
 
         this.verifyToasterMessage([routeName, 'successfully deleted!'])
 
-        cy.log(`✅ Route ${routeName} deleted successfully`)
+        cy.log(`Route ${routeName} deleted successfully`)
         return this
     }
 

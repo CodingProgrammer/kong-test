@@ -13,12 +13,12 @@ const REPORTS_DIR = path.join(__dirname, '..', 'cypress', 'reports');
 const MOCHAWESOME_DIR = path.join(REPORTS_DIR, 'mochawesome');
 const HTML_REPORT_DIR = path.join(REPORTS_DIR, 'html');
 
-console.log('📊 Generating Mochawesome HTML Report...');
+console.log('Generating Mochawesome HTML Report...');
 console.log('================================================');
 
 // Check if mochawesome directory exists
 if (!fs.existsSync(MOCHAWESOME_DIR)) {
-    console.error('❌ No test reports found!');
+    console.error('No test reports found!');
     console.error(`Expected directory: ${MOCHAWESOME_DIR}`);
     console.error('');
     console.error('Please run tests first:');
@@ -31,25 +31,25 @@ const jsonFiles = fs.readdirSync(MOCHAWESOME_DIR)
     .filter(file => file.endsWith('.json'));
 
 if (jsonFiles.length === 0) {
-    console.error('❌ No JSON report files found!');
+    console.error('No JSON report files found!');
     console.error('');
     console.error('Please run tests first:');
     console.error('  npm run cy:run');
     process.exit(1);
 }
 
-console.log(`📁 Found ${jsonFiles.length} test report(s)`);
+console.log(`Found ${jsonFiles.length} test report(s)`);
 console.log('');
 
 try {
     // Step 1: Merge JSON reports
-    console.log('🔄 Step 1: Merging JSON reports...');
+    console.log('Step 1: Merging JSON reports...');
     const mergedReportPath = path.join(MOCHAWESOME_DIR, 'merged-report.json');
     
     // Remove old merged report if exists
     if (fs.existsSync(mergedReportPath)) {
         fs.unlinkSync(mergedReportPath);
-        console.log('🗑️  Removed old merged report');
+        console.log(' Removed old merged report');
     }
     
     // Get all JSON files to merge (excluding merged-report.json)
@@ -61,7 +61,7 @@ try {
         throw new Error('No JSON files to merge');
     }
     
-    console.log(`📝 Merging ${jsonFilesToMerge.length} file(s)...`);
+    console.log(`Merging ${jsonFilesToMerge.length} file(s)...`);
     
     // Use mochawesome-merge with specific files
     const filesPattern = jsonFilesToMerge.map(f => `"${f}"`).join(' ');
@@ -72,11 +72,11 @@ try {
         shell: true
     });
     
-    console.log('✅ Reports merged successfully');
+    console.log('Reports merged successfully');
     console.log('');
 
     // Step 2: Generate HTML report
-    console.log('🔄 Step 2: Generating HTML report...');
+    console.log('Step 2: Generating HTML report...');
     
     // Create HTML report directory if it doesn't exist
     if (!fs.existsSync(HTML_REPORT_DIR)) {
@@ -87,7 +87,7 @@ try {
         stdio: 'inherit'
     });
 
-    console.log('✅ HTML report generated successfully');
+    console.log('HTML report generated successfully');
     console.log('');
 
     // Get report file path
@@ -95,12 +95,12 @@ try {
     
     if (fs.existsSync(htmlReportPath)) {
         console.log('================================================');
-        console.log('✅ Report Generation Complete!');
+        console.log('Report Generation Complete!');
         console.log('');
-        console.log('📄 Report location:');
+        console.log('Report location:');
         console.log(`   ${htmlReportPath}`);
         console.log('');
-        console.log('🌐 Open report:');
+        console.log('Open report:');
         console.log('   npm run report:open');
         console.log('');
         console.log('   Or open manually:');
@@ -116,7 +116,7 @@ try {
 
 } catch (error) {
     console.error('');
-    console.error('❌ Report generation failed:', error.message);
+    console.error('Report generation failed:', error.message);
     process.exit(1);
 }
 

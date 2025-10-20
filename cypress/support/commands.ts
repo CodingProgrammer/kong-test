@@ -87,7 +87,7 @@ Cypress.Commands.add('waitForPageDataLoaded', () => {
     // Method 3: Brief wait to ensure DOM is stable
     cy.wait(500)
 
-    cy.log('✅ Page data loading complete')
+    cy.log('Page data loading complete')
 })
 
 /**
@@ -97,7 +97,7 @@ Cypress.Commands.add('waitForPageDataLoaded', () => {
 Cypress.Commands.add('waitForNetworkIdle', () => {
     cy.log('Waiting for network requests to complete...')
     cy.wait(1000) // Wait for network requests to stabilize
-    cy.log('✅ Network requests complete')
+    cy.log('Network requests complete')
 })
 
 export { }

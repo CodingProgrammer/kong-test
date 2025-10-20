@@ -10,7 +10,7 @@ const { execSync } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
-console.log('🧹 Force cleanup of Kong-related containers');
+console.log('Force cleanup of Kong-related containers');
 console.log('================================================');
 
 // Stop all Kong-related containers
@@ -35,7 +35,7 @@ try {
 }
 
 // Remove all Kong-related containers
-console.log('🗑️  Removing all Kong containers...');
+console.log(' Removing all Kong containers...');
 try {
     const containers = execSync('docker ps -a --filter "name=kong" --format "{{.ID}}"', { encoding: 'utf-8' });
     if (containers.trim()) {
@@ -60,7 +60,7 @@ const DOCKER_DIR = path.join(__dirname, '..', 'docker');
 const DOCKER_COMPOSE_FILE = path.join(DOCKER_DIR, 'docker-compose.yml');
 
 if (fs.existsSync(DOCKER_DIR) && fs.existsSync(DOCKER_COMPOSE_FILE)) {
-    console.log('🧹 Cleaning up using docker-compose...');
+    console.log('Cleaning up using docker-compose...');
     process.chdir(DOCKER_DIR);
     try {
         execSync('docker compose down -v', { stdio: 'ignore' });
@@ -70,7 +70,7 @@ if (fs.existsSync(DOCKER_DIR) && fs.existsSync(DOCKER_COMPOSE_FILE)) {
 }
 
 // Clean up unused networks
-console.log('🌐 Cleaning up Docker networks...');
+console.log('Cleaning up Docker networks...');
 try {
     execSync('docker network prune -f', { stdio: 'ignore' });
 } catch (error) {
@@ -100,7 +100,7 @@ try {
 
 console.log('');
 console.log('================================================');
-console.log('✅ Force cleanup complete!');
+console.log('Force cleanup complete!');
 console.log('');
 console.log('You can now run: npm run setup');
 console.log('================================================');
